@@ -13,3 +13,33 @@
  *= require_tree .
  *= require_self
  */
+
+ .used {
+  background-color: transparent !important;
+  border: 1px solid grey;
+ }
+
+ .pink {
+    background-color: hotpink;
+ }
+
+ .blue {
+    background-color: lightskyblue;
+ }
+
+ .yellow {
+    background-color: yellow;
+ }
+
+ .letter {
+  margin: 8px;
+  width: 12vw;
+  max-width: 120px;
+  height:40px;
+ }
+
+ .letters-box {
+  width: 80vw;
+  max-width: 800px;
+  margin: auto;
+ }
