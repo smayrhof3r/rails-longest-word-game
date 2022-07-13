@@ -9,28 +9,6 @@ const button = document.getElementById("submit");
 
 const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-document.querySelectorAll(".letter").forEach((element) => {
-  element.addEventListener("click", (event) => {
-    if (event.currentTarget.classList.contains("used")) {
-      removeCharFromInput(event.currentTarget.innerHTML);
-    } else {
-      addCharToInput(event.currentTarget.innerHTML);
-    }
-    event.currentTarget.classList.toggle("used");
-  })
-});
-
-wordInput.addEventListener("keyup", (event) => {
-  if (alphabet.includes(event.key.toUpperCase())) {
-    console.log(`marking used: ${event.key}`);
-    markUsed(event.key);
-  } else {
-    console.log(`marking unused: ${event.key}`);
-    markUnused();
-  }
-  checkValid();
-})
-
 const removeCharFromInput = (char) => {
   const word = wordInput.value.split('');
   word.splice(word.lastIndexOf(char), 1);
@@ -76,9 +54,15 @@ const letterArray = () => {
 }
 
 const checkValid = () => {
+  validWord();
+  if (!button.disabled) {
+    validSelection();
+  }
+}
 
-console.log(validSelection());
-  if (validSelection() && validWord()) {
+const markValidity = (valid) => {
+  console.log(valid);
+  if (valid) {
     console.log('valid');
     wordInput.classList.remove('is-invalid');
     button.disabled = false;
@@ -99,9 +83,35 @@ const validSelection = () => {
       valid = false;
     }
   })
-  return valid;
+  markValidity(valid)
 }
 
 const validWord = () => {
-  return true;
+  console.log("checking..");
+  fetch(`https://wagon-dictionary.herokuapp.com/${wordInput.value}`)
+    .then(response => response.json())
+    .then(result => markValidity(result.found));
 }
+
+document.querySelectorAll(".letter").forEach((element) => {
+  element.addEventListener("click", (event) => {
+    if (event.currentTarget.classList.contains("used")) {
+      removeCharFromInput(event.currentTarget.innerHTML);
+    } else {
+      addCharToInput(event.currentTarget.innerHTML);
+    }
+    event.currentTarget.classList.toggle("used");
+    if (wordInput.value.length > 1) { validWord(); }
+  })
+});
+
+wordInput.addEventListener("keyup", (event) => {
+  if (alphabet.includes(event.key.toUpperCase())) {
+    console.log(`marking used: ${event.key}`);
+    markUsed(event.key);
+  } else {
+    console.log(`marking unused: ${event.key}`);
+    markUnused();
+  }
+  checkValid();
+})
