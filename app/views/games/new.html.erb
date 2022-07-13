@@ -10,9 +10,10 @@
   <% end %>
 
   <div class="container text-center justify-content-center">
-    <form action="/score" method = "POST" class = "m-3 justify-content-center">
-      <input type="text" class="form-control mb-3 text-center" id="word" placeholder="Let's go!" value = "">
-      <button type="submit" id = "submit" class="btn btn-primary">Lock it in!</button>
+    <form action="/score" method = "POST" class = "m-3 justify-content-center" data-turbo="false">
+      <input type="text" class="form-control mb-3 text-center" id="word" placeholder="Let's go!" value = "" name = "word">
+      <button type="submit" id = "submit" class="btn btn-primary" disabled>Lock it in!</button>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     </form>
   </div>
 </div>

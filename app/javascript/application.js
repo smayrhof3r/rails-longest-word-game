@@ -4,9 +4,8 @@ import "controllers"
 
 console.log("hello from js")
 const wordInput = document.getElementById("word");
-const letters = document.querySelectorAll(".letter");
+const letterChoices = document.querySelectorAll(".letter");
 const button = document.getElementById("submit");
-
 const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
 const removeCharFromInput = (char) => {
@@ -21,7 +20,7 @@ const addCharToInput = (char) => {
 
 const markUsed = (char) => {
   let oneLetter = [];
-  letters.forEach((letter) => {
+  letterChoices.forEach((letter) => {
     if ((!letter.classList.contains("used")) && (letter.innerHTML === char)) {
       oneLetter.push(letter);
     }
@@ -33,23 +32,23 @@ const markUsed = (char) => {
 }
 
 const markUnused = () => {
-  lettersToMarkUnused().forEach(letter => letter.classList.remove("used"))
+  letterChoicesToMarkUnused().forEach(letter => letter.classList.remove("used"))
 }
 
-const lettersToMarkUnused = () => {
-  const unUsedLetters = [];
+const letterChoicesToMarkUnused = () => {
+  const unUsedletterChoices = [];
   const word = wordInput.value.split('');
   document.querySelectorAll(".used").forEach((letter) => {
     if ( word.includes(letter.innerHTML) ) {
       word.splice(word.lastIndexOf(letter.innerHTML),1);
-    } else { unUsedLetters.push(letter); }
+    } else { unUsedletterChoices.push(letter); }
   });
-  return unUsedLetters;
+  return unUsedletterChoices;
 }
 
 const letterArray = () => {
   const letterArr = [];
-  letters.forEach(letter => letterArr.push(letter.innerHTML));
+  letterChoices.forEach(letter => letterArr.push(letter.innerHTML));
   return letterArr;
 }
 
@@ -63,27 +62,23 @@ const checkValid = () => {
 const markValidity = (valid) => {
   console.log(valid);
   if (valid) {
-    console.log('valid');
     wordInput.classList.remove('is-invalid');
     button.disabled = false;
   } else {
-    console.log('invalid');
     wordInput.classList.add('is-invalid');
     button.disabled = true;
   }
 }
 
 const validSelection = () => {
-  const availableLetters = letterArray();
+  const availableletterChoices = letterArray();
   let valid = true;
   wordInput.value.split('').forEach((letter) => {
-    if (availableLetters.includes(letter)) {
-      availableLetters.splice(availableLetters.lastIndexOf(letter), 1);
-      } else {
-      valid = false;
-    }
+    if (availableletterChoices.includes(letter)) {
+      availableletterChoices.splice(availableletterChoices.lastIndexOf(letter), 1);
+      } else { valid = false; }
   })
-  markValidity(valid)
+  markValidity(valid);
 }
 
 const validWord = () => {
@@ -107,11 +102,8 @@ document.querySelectorAll(".letter").forEach((element) => {
 
 wordInput.addEventListener("keyup", (event) => {
   if (alphabet.includes(event.key.toUpperCase())) {
-    console.log(`marking used: ${event.key}`);
     markUsed(event.key);
-  } else {
-    console.log(`marking unused: ${event.key}`);
-    markUnused();
-  }
+  } else { markUnused(); }
+
   checkValid();
 })
